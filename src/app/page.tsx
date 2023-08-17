@@ -17,7 +17,7 @@ export default function Home() {
 
       <div className="mx-auto my-3 w-9/12 bg-whiteborder rounded-lg border-gray-300 border-2 text-center p-2">
 
-          <Link href= "/AddTodo">
+          <Link href= "/components/AddTodo">
             <button 
               type="button" 
               className="py-3 px-4 inline-flex justify-right items-center gap-2 rounded-md border      border-transparent font-semibold text-blue-500 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-white-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
