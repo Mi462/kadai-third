@@ -1,8 +1,19 @@
+'use client'
+
+import Link from "next/link";
 
 
 export default function EditTodo(){
   return(
-    <div className="mx-auto my-3 w-9/12 bg-whiteborder rounded-lg border-gray-300 border-2 text-center p-2">
+    <div>
+      <header className="space-between  text-2xl font-bold bg-blue-500 text-white text-left p-2">
+        <Link href="/">
+          <h1>Todo List</h1>
+        </Link>
+      </header>
+      
+
+      <div className="mx-auto my-3 w-9/12 bg-whiteborder rounded-lg border-gray-300 border-2 text-center p-2">
         <input 
           type="text" 
           className="flex justify-between border px-4 py-2 rounded-lg focus:outline-none focus:border-blue-400"
@@ -24,5 +35,6 @@ export default function EditTodo(){
           
           </div>
       </div>
+    </div>
   )
 }
