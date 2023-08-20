@@ -65,11 +65,26 @@ const addTodos = () => {
   setText("");
 };
 
-const clickDelete = (id) => {
+const clickDelete = (id: string) => {
   const subNewTodos = [...todos];
-  setTodos(todos.filter((index) => index !== id));
-
+  setTodos(subNewTodos.filter((todo) => todo.id !== id));
 }
+
+
+//Editボタン押下時に
+  //下のEdit用のinputタグの中に編集内容を渡す(inputタグのvalueに編集内容を渡す)
+  //対象のTodoリストを削除する
+const clickEdit = (id: string, todo: string) => {
+  const subNewTodos = [...todos];
+  console.log(id)
+  console.log(todo)
+  setTodos(subNewTodos.filter((todo) => todo.id !== id));
+}
+
+const changeEditingText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setText(e.target.value);
+}
+
 
 
   return (
@@ -121,13 +136,15 @@ const clickDelete = (id) => {
               </select>
               
               {/* 編集ボタン */}
-                <Link href="EditTodo">
+                {/* <Link href="EditTodo"> */}
                   <button 
                     type="button" 
-                    className={editButtonLayout}>
+                    className={editButtonLayout}
+                    onClick={() => clickEdit(todo.id, todo.todo)}
+                  >
                   Edit
                   </button>
-                </Link>
+                {/* </Link> */}
               {/* 編集ボタン */}
               
               {/* 削除ボタン */}
@@ -240,8 +257,10 @@ const clickDelete = (id) => {
       <div className="flex mx-auto my-3 w-9/12 bg-whiteborder rounded-lg border-gray-300 border-2 text-center p-2">
         <input 
           type="text" 
+          value={todos.todo}
           className="flex justify-between w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-blue-400"
-          placeholder='Todo'/>
+          placeholder='Todo'
+          onChange={changeEditingText}/>
         
         <div className="flex">
         <select 
