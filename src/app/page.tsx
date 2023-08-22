@@ -2,8 +2,10 @@
 
 import AddTodo from "./AddTodo/page"
 import Link from "next/link";
+import db from "../lib/firebase/firebase";
+import { collection, getDocs } from "firebase/firestore"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // type Props = {
 //   text: string
@@ -14,26 +16,28 @@ export default function Home() {
 
   const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
 
-  const newTodo = [
-    {
-      id: "",
-      todo: "",
-      status: "waiting",
-      isEditing: "false"
-    }
-  ]
+ 
 
 
 //Deleteボタン押下時に対象のTodoリストが削除される
   //Deleteボタン押下時に大将のTodoリストのidと全てのTodoリストのidを照らし合わせて、一致したものだけ消す（）
 
   const [text, setText] = useState<string>('')
-  const [todos, setTodos] = useState(newTodo);
+  const [todos, setTodos] = useState([]);
 
   const clickDelete = (id: string) => {
     const subNewTodos = [...todos];
     setTodos(subNewTodos.filter((todo) => todo.id !== id));
   }
+
+  useEffect(() => {
+    //データベースからデータを取得
+    const todoData = collection(db, "data");
+    getDocs(todoData).then((snapShot) => {
+      //console.log(snapShot.docs.map((doc) => ({ ...doc.data() })))
+      setTodos(snapShot.docs.map((doc) => ({ ...doc.data() })));
+    })
+  }, [])
 
 
   return (
@@ -71,7 +75,7 @@ export default function Home() {
             <li 
               key={todo.id}
               className="flex justify-between p-4 bg-white border-l-4 border-blue-500 rounded shadow">
-              {todo.todo}
+              {todo.text}
             <div className="flex justify-right">
               <select 
                 id="hs-select-label" 
