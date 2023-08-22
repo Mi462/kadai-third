@@ -23,18 +23,18 @@ export default function Home() {
   //Deleteボタン押下時に大将のTodoリストのidと全てのTodoリストのidを照らし合わせて、一致したものだけ消す（）
 
   const [text, setText] = useState<string>('')
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<object[]>([]);
 
-  const clickDelete = (id: string) => {
-    const subNewTodos = [...todos];
-    setTodos(subNewTodos.filter((todo) => todo.id !== id));
-  }
+  // const clickDelete = (id: string) => {
+  //   const subNewTodos = [...todos];
+  //   setTodos(subNewTodos.filter((todo) => todo.id !== id));
+  // }
 
   useEffect(() => {
     //データベースからデータを取得
     const todoData = collection(db, "data");
     getDocs(todoData).then((snapShot) => {
-      //console.log(snapShot.docs.map((doc) => ({ ...doc.data() })))
+      console.log(snapShot.docs.map((doc) => ({ ...doc.data() })))
       setTodos(snapShot.docs.map((doc) => ({ ...doc.data() })));
     })
   }, [])
@@ -46,16 +46,16 @@ export default function Home() {
       <header className="flex justify-between items-center space-between  text-2xl font-bold bg-blue-500 text-white text-left p-2">
         <h1>Todo List</h1>
         <div className="flex">
-          <select 
-              id="hs-select-label" 
-              className="py-3 px-4 pr-9 block border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-              defaultValue="-Status-">
-              {OPTION_VALUES.map((optionvalue) => (
-                <option key={optionvalue} value={optionvalue}>
-                  {optionvalue}
-                </option>
-              ))}
-          </select>
+        <select 
+                id="hs-select-label" 
+                className="py-3 px-4 pr-9 block border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                defaultValue="-Status-">
+                  {OPTION_VALUES.map((optionvalue) => (
+                    <option key={optionvalue} value={optionvalue}>
+                      {optionvalue}
+                    </option>
+                  ))}
+              </select>
         <Link href= "/AddTodo">
             <button 
               type="button" 
