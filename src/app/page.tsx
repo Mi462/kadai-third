@@ -3,7 +3,7 @@
 import AddTodo from "./AddTodo/page"
 import Link from "next/link";
 import db from "../lib/firebase/firebase";
-import { collection, getDocs } from "firebase/firestore"
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore"
 
 import { useEffect, useState } from "react";
 
@@ -22,13 +22,14 @@ export default function Home() {
 //Deleteボタン押下時に対象のTodoリストが削除される
   //Deleteボタン押下時に大将のTodoリストのidと全てのTodoリストのidを照らし合わせて、一致したものだけ消す（）
 
-  const [text, setText] = useState<string>('')
   const [todos, setTodos] = useState<object[]>([]);
 
-  // const clickDelete = (id: string) => {
-  //   const subNewTodos = [...todos];
-  //   setTodos(subNewTodos.filter((todo) => todo.id !== id));
-  // }
+  const clickDelete = (id: string) => {
+    //選んだTodoのidを特定する
+    //データベースからデータを削除
+    deleteDoc(doc(db, "data", id))
+    //db.collection('data').doc(todo.id).delete();
+  }
 
   useEffect(() => {
     //データベースからデータを取得
@@ -104,7 +105,7 @@ export default function Home() {
                 <button 
                   type="button" 
                   className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border      border-transparent font-semibold text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
-                  // onClick={() => clickDelete(todo.id)}
+                  onClick={() => clickDelete(todo.id)}
                   >
                   Delete
                 </button>
