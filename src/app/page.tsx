@@ -7,27 +7,30 @@ import { collection, deleteDoc, doc, getDocs } from "firebase/firestore"
 
 import { useEffect, useState } from "react";
 
-// type Props = {
-//   text: string
-//   todos: string
-// }
+type Todo = {
+  id: string;
+  text: string;
+  isEditing: boolean;
+  status: string; 
+}
 
 export default function Home() {
 
   const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
 
- 
-
-
 //Deleteボタン押下時に対象のTodoリストが削除される
   //Deleteボタン押下時に大将のTodoリストのidと全てのTodoリストのidを照らし合わせて、一致したものだけ消す（）
 
-  const [todos, setTodos] = useState<object[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const clickDelete = (id: string) => {
     //選んだTodoのidを特定する
     //データベースからデータを削除
-    deleteDoc(doc(db, "data", id))
+    console.log(id)
+    const userDocumentRef = doc(db, 'users', id);
+    console.log(userDocumentRef)
+    deleteDoc(userDocumentRef);
+    //const collection = db.collection('data')
     //db.collection('data').doc(todo.id).delete();
   }
 
@@ -36,7 +39,14 @@ export default function Home() {
     const todoData = collection(db, "data");
     getDocs(todoData).then((snapShot) => {
       console.log(snapShot.docs.map((doc) => ({ ...doc.data() })))
-      setTodos(snapShot.docs.map((doc) => ({ ...doc.data() })));
+      // setTodos(snapShot.docs.map((doc) => ({ ...doc.data() })));
+      const getTodoData: Todo[] = snapShot.docs.map((doc) => ({
+        id: doc.data().id,
+        text: doc.data().text,
+        isEditing: doc.data().isEditing,
+        status: doc.data().status,
+      }))
+      setTodos(getTodoData)
     })
   }, [])
 
