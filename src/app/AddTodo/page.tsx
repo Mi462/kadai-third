@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { collection, addDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import db from "../../lib/firebase/firebase"
+import { useRouter } from "next/navigation";
 
 export default function AddTodo() {
 
@@ -15,23 +16,45 @@ export default function AddTodo() {
     //inputタグに入力した内容をpropsを利用して値を渡す
     //mapメソッド内容を表示させる
 
-  const [addTodo, setAddTodo] = useState<string>("")
+    const router = useRouter(); 
+    // console.log(router.pathname)
 
-  const sendTodos = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //firebaseのデータベースに追加する
-    e.preventDefault();
-    if(addTodo === "") return;
-    addDoc(collection(db, "data"), {
-      id: uuidv4(),
-      text: addTodo,
-      status: "waiting",
-      isEditing: "false"
-    })
-    setAddTodo("")
+    type Todo = {
+      id: string;
+      text: string;
+      isEditing: boolean;
+      status: string; 
+    }
+
+    const [addTodo, setAddTodo] = useState<Todo>({
+    id:  uuidv4(),
+    text: "",
+    isEditing: false,
+    status: "waiting"
+  })
+
+    //firebaseにデータを追加する
+    const sendTodos = (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+     if(addTodo.text === "") return;
+      setDoc(doc(db, "data", addTodo.id), {
+        id: addTodo.id,
+        text: addTodo.text,
+        isEditing: false,
+        status: "waiting",
+      });
+      setAddTodo({
+        id: uuidv4(),
+        text: "",
+        isEditing: false,
+        status: "waiting"
+      })
+      
+      router.push("/")
   };
 
   return (
-    <div>
+    <div>  
       {/* header */}
       <header className="flex justify-between items-center space-between  text-2xl font-bold bg-blue-500 text-white text-left p-2">
         <Link href="/">
@@ -55,18 +78,15 @@ export default function AddTodo() {
           type="text" 
           className="flex justify-between w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-blue-400"
           placeholder='Todo'
-          value={addTodo}
-          onChange={(e) => setAddTodo(e.target.value)}/>
-          <Link href="/">
-            <button 
+          value={addTodo.text}
+          onChange={(e) => setAddTodo({...addTodo, text:e.target.value})}/>
+          <button 
               type="button" 
               className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
               onClick={sendTodos}
-              //useRouter
             >
-                Add
-            </button>
-          </Link>     
+              Add
+          </button>  
       </div>
       {/* 追加サイト */}
     </div>
