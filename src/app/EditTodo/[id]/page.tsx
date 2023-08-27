@@ -1,11 +1,17 @@
 'use client'
 
+import { NextPage } from "next";
 import Link from "next/link";
 import { useState } from "react";
 
+interface PageProps {
+  params: {
+    id: string[];
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 
-
-export default function EditTodo({ }){
+export default function EditTodo: NextPage<PageProps> ({ params, searchParams }) => {
 
   const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
 
@@ -56,7 +62,6 @@ export default function EditTodo({ }){
       
       {/* 編集サイト */}
       
-    {/* { todo.id !== id ? () : ()} */}
     <div> 
       {/* 中身 */}
       <div className="flex mx-auto my-3 w-9/12 bg-whiteborder rounded-lg border-gray-300 border-2 text-center p-2">

@@ -23,7 +23,7 @@ export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const router = useRouter();
-  
+
   const clickDelete = (id: string) => {
     //選んだTodoのidを特定する
     //データベースからデータを削除
@@ -51,7 +51,7 @@ export default function Home() {
   // Editボタン押下時のidを編集ページに渡す
   const clickEdit = (id: string) => {
     //console.log(id)
-    router.push("/edit/${id}")
+    router.push("/edit/[id]")
   }
 
 
@@ -122,7 +122,6 @@ export default function Home() {
                   >
                   Edit
                   </button>
-                
               {/* 編集ボタン */}
               
               {/* 削除ボタン */}
