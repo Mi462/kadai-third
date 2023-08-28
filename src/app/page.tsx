@@ -15,14 +15,12 @@ type Todo = {
 
 export default function Home() {
 
-  const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
-
-//Deleteボタン押下時に対象のTodoリストが削除される
-  //Deleteボタン押下時に大将のTodoリストのidと全てのTodoリストのidを照らし合わせて、一致したものだけ消す（）
-
+  //データベースで扱う情報
   const [todos, setTodos] = useState<Todo[]>([]);
-
+  //ページ遷移用
   const router = useRouter();
+  //Statusの選択肢
+  const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
 
   const clickDelete = (id: string) => {
     //選んだTodoのidを特定する
@@ -48,10 +46,12 @@ export default function Home() {
     })
   }, [])
 
-  // Editボタン押下時のidを編集ページに渡す
+  //編集ボタン押下時の動き
   const clickEdit = (id: string) => {
     //console.log(id)
-    router.push("/edit/[id]")
+    // Editボタン押下時に動的なパスを指定する
+    router.push(`/edit/${id}`)
+
   }
 
 
@@ -61,7 +61,7 @@ export default function Home() {
       <header className="flex justify-between items-center space-between  text-2xl font-bold bg-blue-500 text-white text-left p-2">
         <h1>Todo List</h1>
         <div className="flex">
-        <Link href= "/AddTodo">
+        <Link href= "/add">
             <button 
               type="button" 
               className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-pink-500 text-white hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
