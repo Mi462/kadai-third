@@ -3,14 +3,12 @@
 import db from "@/lib/firebase/firebase";
 import { collection, query, where, doc, getDoc, setDoc, getDocs } from "firebase/firestore";
 import Link from "next/link";
-//import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default async function Edit({ params }: { params: { id: string } }){
+export default function Edit({ params }: { params: { id: string } }){
 
   //渡ってきたid
   console.log(params.id)
-
-  const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
 
   type Todo = {
     id: string;
@@ -19,25 +17,25 @@ export default async function Edit({ params }: { params: { id: string } }){
     status: string; 
   }
 
-  // const docRef = doc(db, "data", "caa3820f-27fc-4ad2-af97-d0d5f373825a");
-  // const docSnap: any = await getDoc(docRef);
-  // console.log(docSnap.data());
-
-  const docRef = doc(db, "data", params.id);
-  const docSnap: any = await getDoc(docRef);
-  //渡ってきたidを元にデータベースからデータを取り出してきた
-  console.log(docSnap.data());
-
-  //Editボタン押下時に
-  //下のEdit用のinputタグの中に編集内容を渡す(inputタグのvalueに編集内容を渡す)
-  //対象のTodoリストを削除する
-
-  //console.log(id)
-  //渡されたidを利用して、データベースからデータを取ってくる
-    // const docRef = doc(db, "data", id);
-    // const docSnap: any = await getDoc(docRef);
-    //データベースから取ってきたデータ
-    // console.log(docSnap.data());
+  const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
+  const [editTodo, setEditTodo] = useState<Todo>()
+  
+  useEffect(() => {
+    (async() => {
+      const docRef = doc(db, "data", params.id);
+      const docSnap: any = await getDoc(docRef);
+      //渡ってきたidを元にデータベースからデータを取り出してきた
+      console.log(docSnap.data());
+      //取り出したデータをsetEditTodoに設定する
+      setEditTodo({
+        id: docSnap.data().id,
+        text: docSnap.data().text,
+        isEditing: docSnap.data().isEditing,
+        status: docSnap.data().status
+      })
+      console.log(editTodo)
+    })
+  }, [])
 
   const clickEdit = (id: string) => {
     // データベースのデータを更新して編集
@@ -75,9 +73,10 @@ export default async function Edit({ params }: { params: { id: string } }){
           {/* 入力欄 */}
           <input 
             type="text" 
-            defaultValue={docSnap.data().text}
+            //value={editTodo.text}
             className="flex justify-between w-full border px-4 py-2 rounded-lg focus:outline-none focus:border-blue-400"
             placeholder='Todo'
+            // onChange={(e) => setEditTodo({...editTodo, text:e.target.value})}
           />
           {/* 入力欄 */}
         

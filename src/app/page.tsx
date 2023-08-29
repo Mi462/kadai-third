@@ -48,10 +48,8 @@ export default function Home() {
 
   //編集ボタン押下時の動き
   const clickEdit = (id: string) => {
-    //console.log(id)
     // Editボタン押下時に動的なパスを指定する
     router.push(`/edit/${id}`)
-
   }
 
 

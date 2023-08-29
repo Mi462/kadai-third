@@ -49,7 +49,6 @@ export default function AddTodo() {
         isEditing: false,
         status: "waiting"
       })
-      
       router.push("/")
   };
 
