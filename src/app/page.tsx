@@ -40,8 +40,7 @@ export default function Home() {
       const getTodoData: Todo[] = snapShot.docs.map((doc) => ({
         id: doc.data().id,
         text: doc.data().text,
-        // isEditing: doc.data().isEditing,
-        status: doc.data().status,
+        status: doc.data().status
       }))
       setTodos(getTodoData)
     })
