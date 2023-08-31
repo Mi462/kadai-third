@@ -11,7 +11,6 @@ import Todos from "./components/todos";
 type Todo = {
   id: string;
   text: string;
-  // isEditing: boolean;
   status: string; 
 }
 
@@ -21,10 +20,8 @@ export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   //ページ遷移用
   const router = useRouter();
-  //Statusの選択肢
-  // const OPTION_VALUES = ["Waiting", "Doing", "Done"];
   //上のプルダウンの状態
-  const [ selectStatus, setSelectStatus ] = useState("Waiting");
+  const [ selectStatus, setSelectStatus ] = useState("waiting");
 
   const clickDelete = (id: string) => {
     //選んだTodoのidを特定する
@@ -61,24 +58,22 @@ export default function Home() {
     setDoc(doc(db, "data", id), {
       id: id,
       text: text,
-      // isEditing: false,
       status: e.target.value,
     });
     setTodos([{
       id: id,
       text: text,
-      // isEditing: false,
       status: e.target.value
     }])
-    console.log(todos)
+    
   }
+  console.log(todos)
 
   //編集ボタン押下時の動き
   const clickEdit = (id: string) => {
     // Editボタン押下時に動的なパスを指定する
     router.push(`/edit/${id}`)
   }
-
 
   return (
     <div className="flex flex-col h-screen">

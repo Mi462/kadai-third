@@ -33,8 +33,8 @@ export default function Todos({ selectStatus, onChangeTodoStatus, todos, onChang
         <ul className='space-y-3'>
           {todos.map((todo: any) => {
             // Statusの絞り込み（上）の内容（"Waiting", "Doing", "Done"）によって、表示されるtodosが変わる
-            if ( selectStatus === "Doing" && todo.status !== "Doing") return
-            if ( selectStatus === "Done" && todo.status !== "Done") return
+            if ( selectStatus === "doing" && todo.status !== "doing") return
+            if ( selectStatus === "done" && todo.status !== "done") return
 
             return (
             // リストの内容

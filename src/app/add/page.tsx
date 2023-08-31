@@ -17,19 +17,16 @@ export default function AddTodo() {
     //mapメソッド内容を表示させる
 
     const router = useRouter(); 
-    // console.log(router.pathname)
 
     type Todo = {
       id: string;
       text: string;
-      // isEditing: boolean;
       status: string; 
     }
 
     const [addTodo, setAddTodo] = useState<Todo>({
     id:  uuidv4(),
     text: "",
-    // isEditing: false,
     status: "waiting"
   })
 
@@ -40,13 +37,11 @@ export default function AddTodo() {
       setDoc(doc(db, "data", addTodo.id), {
         id: addTodo.id,
         text: addTodo.text,
-        // isEditing: false,
         status: addTodo.status
       });
       setAddTodo({
         id: uuidv4(),
         text: "",
-        // isEditing: false,
         status: "waiting"
       })
       router.push("/")
