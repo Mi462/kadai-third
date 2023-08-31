@@ -1,7 +1,13 @@
 
+type Todo = {
+  id: string;
+  text: string;
+  status: string; 
+}
+
 type Props = {
   selectStatus: string
-  todos: any
+  todos: Todo[]
   onChangeTodoStatus: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeSubTodoStatus: (id: string, text: string, e: React.ChangeEvent<HTMLSelectElement>) => void;
   clickEdit: (id: string) => void;

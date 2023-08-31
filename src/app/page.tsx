@@ -4,8 +4,8 @@ import db from "../lib/firebase/firebase";
 import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Header from "./components/header";
-import Todos from "./components/todos";
+import Header from "./pageComponents/header";
+import Todos from "./pageComponents/todos";
 
 type Todo = {
   id: string;
@@ -23,8 +23,6 @@ export default function Home() {
   const [ selectStatus, setSelectStatus ] = useState("waiting");
 
   const clickDelete = (id: string) => {
-    //選んだTodoのidを特定する
-    //データベースからデータを削除
     //firebaseの中のデータを削除する（バック側）
     deleteDoc(doc(db,"data", id))
     //表示するための処理（フロント側）
