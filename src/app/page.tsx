@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link";
 import db from "../lib/firebase/firebase";
 import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore"
 import { useEffect, useState } from "react";
@@ -59,14 +58,15 @@ export default function Home() {
       text: text,
       status: e.target.value,
     });
-    setTodos([{
-      id: id,
-      text: text,
-      status: e.target.value
-    }])
-    
+    const stateChangeTodo = todos.map((todo) => {
+      if(todo.id === id){
+        return { id:todo.id, text:todo.text, status: e.target.value}
+      } else {
+        return todo
+      }
+    })
+    setTodos(stateChangeTodo)
   }
-  console.log(todos)
 
   //編集ボタン押下時の動き
   const clickEdit = (id: string) => {
