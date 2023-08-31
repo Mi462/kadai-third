@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import db from "../lib/firebase/firebase";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore"
+import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Todo = {
   id: string;
   text: string;
-  isEditing: boolean;
+  // isEditing: boolean;
   status: string; 
 }
 
@@ -20,7 +20,9 @@ export default function Home() {
   //ページ遷移用
   const router = useRouter();
   //Statusの選択肢
-  const OPTION_VALUES = ["-Status-", "Waiting", "Doing", "Done"];
+  // const OPTION_VALUES = ["Waiting", "Doing", "Done"];
+  //上のプルダウンの状態
+  const [ selectStatus, setSelectStatus ] = useState("Waiting");
 
   const clickDelete = (id: string) => {
     //選んだTodoのidを特定する
@@ -39,12 +41,29 @@ export default function Home() {
       const getTodoData: Todo[] = snapShot.docs.map((doc) => ({
         id: doc.data().id,
         text: doc.data().text,
-        isEditing: doc.data().isEditing,
+        // isEditing: doc.data().isEditing,
         status: doc.data().status,
       }))
       setTodos(getTodoData)
     })
   }, [])
+
+  //一つ一つのStatusの内容を変更できる
+  const onChangeSubTodoStatus = (id: string, text: string, e: React.ChangeEvent<HTMLSelectElement>) => {
+    //i該当するidのデータのstatusを更新する
+    setDoc(doc(db, "data", id), {
+      id: id,
+      text: text,
+      // isEditing: false,
+      status: e.target.value,
+    });
+    setTodos({
+      id: id,
+      text: text,
+      // isEditing: false,
+      status: e.target.value
+    })
+  }
 
   //編集ボタン押下時の動き
   const clickEdit = (id: string) => {
@@ -73,25 +92,29 @@ export default function Home() {
       {/* 中身 */}
       <div className="mx-auto my-3 w-9/12 bg-whiteborder rounded-lg border-gray-300 border-2 text-center p-2">
         
-        {/* Statusの絞り込み */}
+        {/* Statusの絞り込み（上） */}
         <div>
-        <select 
-                id="hs-select-label" 
-                className="py-3 px-4 pr-9 block border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                defaultValue="-Status-">
-                  {OPTION_VALUES.map((optionvalue) => (
-                    <option key={optionvalue} value={optionvalue}>
-                      {optionvalue}
-                    </option>
-                  ))}
-              </select>
+          <select 
+            className="py-3 px-4 pr-9 block border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+            name="status"
+            value={selectStatus}
+            onChange={(e) => setSelectStatus(e.target.value)}
+            >
+              <option value="waiting">Waiting</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
+          </select>
         </div>
-        {/* Statusの絞り込み */}
+        {/* Statusの絞り込み（上） */}
 
         {/* リスト */}
         <ul className='space-y-3'>
-          {todos.map((todo) => (
+          {todos.map((todo) => {
+            // Statusの絞り込み（上）の内容（"Waiting", "Doing", "Done"）によって、表示されるtodosが変わる
+            if ( selectStatus === "Doing" && todo.status !== "Doing") return
+            if ( selectStatus === "Done" && todo.status !== "Done") return
 
+            return (
             // リストの内容
             <li 
               key={todo.id}
@@ -99,18 +122,17 @@ export default function Home() {
               {todo.text}
 
             <div className="flex justify-right">
-              {/* Stateの内容 */}
-              <select 
-                id="hs-select-label" 
+              {/* Statusの内容 */}
+              <select
                 className="py-3 px-4 pr-9 block border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
-                defaultValue="-Status-">
-                  {OPTION_VALUES.map((optionvalue) => (
-                    <option key={optionvalue} value={optionvalue}>
-                      {optionvalue}
-                    </option>
-                  ))}
+                value={todo.text}
+                onChange={(e) => onChangeSubTodoStatus(todo.id, todo.text, e)}
+                >
+                <option value="waiting">Waiting</option>
+                <option value="doing">Doing</option>
+                <option value="done">Done</option>
               </select>
-              {/* Stateの内容 */}
+              {/* Statusの内容 */}
               
               {/* 編集ボタン */}
                   <button 
@@ -118,7 +140,7 @@ export default function Home() {
                     className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border      border-transparent font-semibold text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
                     onClick={() => clickEdit(todo.id)}
                   >
-                  Edit
+                    Edit
                   </button>
               {/* 編集ボタン */}
               
@@ -132,9 +154,9 @@ export default function Home() {
                 </button>
               {/* 削除ボタン */}
 
-              </div> 
+            </div> 
             </li>
-            ))}
+          )})}
         </ul>
         {/* リスト内容 */}
 

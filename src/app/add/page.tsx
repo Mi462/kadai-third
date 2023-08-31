@@ -22,14 +22,14 @@ export default function AddTodo() {
     type Todo = {
       id: string;
       text: string;
-      isEditing: boolean;
+      // isEditing: boolean;
       status: string; 
     }
 
     const [addTodo, setAddTodo] = useState<Todo>({
     id:  uuidv4(),
     text: "",
-    isEditing: false,
+    // isEditing: false,
     status: "waiting"
   })
 
@@ -40,13 +40,13 @@ export default function AddTodo() {
       setDoc(doc(db, "data", addTodo.id), {
         id: addTodo.id,
         text: addTodo.text,
-        isEditing: false,
-        status: "waiting",
+        // isEditing: false,
+        status: addTodo.status
       });
       setAddTodo({
         id: uuidv4(),
         text: "",
-        isEditing: false,
+        // isEditing: false,
         status: "waiting"
       })
       router.push("/")
