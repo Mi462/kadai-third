@@ -23,7 +23,7 @@ export default function Todos({ selectStatus, onChangeTodoStatus, todos, onChang
             value={selectStatus}
             onChange={(e) => onChangeTodoStatus(e)}
             >
-              <option value="waiting">All</option>
+              <option value="all">All</option>
               <option value="waiting">Waiting</option>
               <option value="doing">Doing</option>
               <option value="done">Done</option>
@@ -53,7 +53,7 @@ export default function Todos({ selectStatus, onChangeTodoStatus, todos, onChang
                 value={todo.status}
                 onChange={(e) => onChangeSubTodoStatus(todo.id, todo.text, e)}
                 >
-                <option value="waiting">All</option>
+                <option value="all">All</option>
                 <option value="waiting">Waiting</option>
                 <option value="doing">Doing</option>
                 <option value="done">Done</option>

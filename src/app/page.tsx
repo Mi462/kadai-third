@@ -15,7 +15,7 @@ export default function Home() {
   //ページ遷移用
   const router = useRouter();
   //上のプルダウンの状態
-  const [ selectStatus, setSelectStatus ] = useState("waiting");
+  const [ selectStatus, setSelectStatus ] = useState("all");
 
   const clickDelete = (id: string) => {
     //firebaseの中のデータを削除する（バック側）
