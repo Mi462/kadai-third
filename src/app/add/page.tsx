@@ -6,17 +6,14 @@ import { setDoc, doc } from "firebase/firestore";
 import db from "../../lib/firebase/firebase"
 import { useRouter } from "next/navigation";
 import Header from "../pageComponents/header";
+import Link from "next/link";
+import { Todo } from "../type/type"
 
 export default function AddTodo() {
 
     const router = useRouter(); 
 
-    type Todo = {
-      id: string;
-      text: string;
-      status: string; 
-    }
-
+    
     //inputタグに入力して追加する内容
     const [addTodo, setAddTodo] = useState<Todo>({
     id:  uuidv4(),
@@ -64,6 +61,14 @@ export default function AddTodo() {
             >
               Add
           </button>  
+          <></>
+      </div>
+      <div className="flex justify-center">
+        <Link href="/">
+          <button type="button" className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+            Back to Top Page
+          </button>
+          </Link>
       </div>
       {/* 追加サイト */}
     </div>

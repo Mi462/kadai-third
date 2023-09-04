@@ -1,9 +1,4 @@
-
-type Todo = {
-  id: string;
-  text: string;
-  status: string; 
-}
+import { Todo } from "../type/type"
 
 type Props = {
   selectStatus: string
@@ -28,6 +23,7 @@ export default function Todos({ selectStatus, onChangeTodoStatus, todos, onChang
             value={selectStatus}
             onChange={(e) => onChangeTodoStatus(e)}
             >
+              <option value="waiting">All</option>
               <option value="waiting">Waiting</option>
               <option value="doing">Doing</option>
               <option value="done">Done</option>
@@ -41,6 +37,7 @@ export default function Todos({ selectStatus, onChangeTodoStatus, todos, onChang
             // Statusの絞り込み（上）の内容（"Waiting", "Doing", "Done"）によって、表示されるtodosが変わる
             if ( selectStatus === "doing" && todo.status !== "doing") return
             if ( selectStatus === "done" && todo.status !== "done") return
+            if ( selectStatus === "waiting" && todo.status !== "waiting") return
 
             return (
             // リストの内容
@@ -56,6 +53,7 @@ export default function Todos({ selectStatus, onChangeTodoStatus, todos, onChang
                 value={todo.status}
                 onChange={(e) => onChangeSubTodoStatus(todo.id, todo.text, e)}
                 >
+                <option value="waiting">All</option>
                 <option value="waiting">Waiting</option>
                 <option value="doing">Doing</option>
                 <option value="done">Done</option>

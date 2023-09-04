@@ -5,17 +5,13 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/app/pageComponents/header";
+import Link from "next/link";
+import { Todo } from "../../type/type"
 
 export default function Edit({ params }: { params: { id: string } }){
 
   //Saveボタン押下時にTop画面に遷移するためのもの
   const router = useRouter(); 
-
-  type Todo = {
-    id: string;
-    text: string;
-    status: string; 
-  }
 
   const [editTodo, setEditTodo] = useState<Todo>({
     id: params.id,
@@ -39,11 +35,7 @@ export default function Edit({ params }: { params: { id: string } }){
   
   const clickEdit = (id: string, text: string, status: string) => {
     // データベースのデータを更新して編集
-    setDoc(doc(db, "data", id), {
-      id: id,
-      text: text,
-      status: status
-    });
+    setDoc(doc(db, "data", id), { id, text, status });
     router.push("/")
   }
 
@@ -87,6 +79,17 @@ export default function Edit({ params }: { params: { id: string } }){
 
         </div>
         {/* 囲い  */}
+
+        {/* Backボタン */}
+        
+        <div className="flex justify-center">
+          <Link href="/">
+            <button type="button" className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+              Back to Top Page
+            </button>
+          </Link>
+        </div>
+        {/* Backボタン */}
       
       </div>       
       {/* 編集サイト */}
