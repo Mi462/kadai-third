@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/app/pageComponents/header";
 import Link from "next/link";
 import { Todo } from "../../type/type"
+import BackToTopPageButton from "@/app/pageComponents/BackToTopPageButton";
 
 export default function Edit({ params }: { params: { id: string } }){
 
@@ -16,14 +17,16 @@ export default function Edit({ params }: { params: { id: string } }){
   const [editTodo, setEditTodo] = useState<Todo>({
     id: params.id,
     text: "",
-    status: "waiting"
+    status: "all"
   })
   
   useEffect(() => {
     (async() => {
       //渡ってきたidを元にデータベースからデータを取り出してきた
       const docRef = doc(db, "data", params.id);
-      const docSnap: any = await getDoc(docRef); 
+      const docSnap = await getDoc(docRef); 
+      //型ガードによりdocSnap: DocumentDataとする
+      if(!docSnap.exists()) return;
       //取り出したデータをsetEditTodoに設定する
       setEditTodo({
         id: params.id,
@@ -35,6 +38,7 @@ export default function Edit({ params }: { params: { id: string } }){
   
   const clickEdit = (id: string, text: string, status: string) => {
     // データベースのデータを更新して編集
+    if(editTodo.text === "") return;
     setDoc(doc(db, "data", id), { id, text, status });
     router.push("/")
   }
@@ -80,16 +84,9 @@ export default function Edit({ params }: { params: { id: string } }){
         </div>
         {/* 囲い  */}
 
-        {/* Backボタン */}
-        
-        <div className="flex justify-center">
-          <Link href="/">
-            <button type="button" className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
-              Back to Top Page
-            </button>
-          </Link>
-        </div>
-        {/* Backボタン */}
+        {/* Back to Top Pageボタン */}
+        <BackToTopPageButton />
+        {/* Back to Top Pageボタン */}
       
       </div>       
       {/* 編集サイト */}

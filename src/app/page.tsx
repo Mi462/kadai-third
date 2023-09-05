@@ -44,18 +44,9 @@ export default function Home() {
   //一つ一つのStatusの内容を変更できる
   const onChangeSubTodoStatus = (id: string, text: string, e: React.ChangeEvent<HTMLSelectElement>) => {
     //i該当するidのデータのstatusを更新する
-    setDoc(doc(db, "data", id), {
-      id: id,
-      text: text,
-      status: e.target.value,
-    });
-    const stateChangeTodo = todos.map((todo) => {
-      //todo.id === id ? id:todo.id, text:todo.text, status: e.target.value : return todo
-      if(todo.id === id){
-        return { id:todo.id, text:todo.text, status: e.target.value}
-      } else {
-        return todo
-      }
+    setDoc(doc(db, "data", id), { id, text, status: e.target.value });
+    const stateChangeTodo: any = todos.map((todo) => {
+      todo.id === id ? { id:todo.id, text:todo.text, status: e.target.value } : todo
     })
     setTodos(stateChangeTodo)
   }
