@@ -1,7 +1,7 @@
 'use client'
 
 import db from "@/lib/firebase/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { DocumentData, doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/app/pageComponents/header";
@@ -25,13 +25,11 @@ export default function Edit({ params }: { params: { id: string } }){
       //渡ってきたidを元にデータベースからデータを取り出してきた
       const docRef = doc(db, "data", params.id);
       const docSnap = await getDoc(docRef); 
-      //型ガードによりdocSnap: DocumentDataとする
-      if(!docSnap.exists()) return;
       //取り出したデータをsetEditTodoに設定する
       setEditTodo({
         id: params.id,
-        text: docSnap.data().text,
-        status: docSnap.data().status
+        text: docSnap.data()?.text,
+        status: docSnap.data()?.status
       })
     })()
   }, [])
